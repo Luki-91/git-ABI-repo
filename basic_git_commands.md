@@ -1,7 +1,7 @@
 ## git clone link_to_repo
 command for cloning an online repository. Need to add the address from github after the command. Sets the local repository to the newest snapshot of the one copied from the internet and sets the working directory as well. Need to still use cd to enter the working directory.
 ## git add file1
-allows to add file1 (or more, file1 file2 file3 works) to the staging area. Then the file can be comitted in the next step. 
+
 ## git status
 allows to check the status of the current repository - how many changed files are being tracked, how many are in staging area, what is their names, etc.
 ## git commit -m "Commit message"
