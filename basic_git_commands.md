@@ -27,3 +27,11 @@ pushes the commited changes to the online repository that it was derived (cloned
 ## git mv oldfilename newfilename
 
 mv is the command that allows to move a file, and allows to assign a new name, thereby basically renaming. However, just using the mv command will create a new file, therefore git won't back it up anymore. So if you use git mv, the file will still be connected to the old one, as the change is added as a rename and automatically put into the staging area
+
+## git checkout -b branchname
+
+creates a new branch that will be also activated
+
+## git rm filename
+
+removes a file in repository
