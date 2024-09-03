@@ -1,1 +1,4 @@
 output.pdf
+*.pdf
+*.html
+*.docx
