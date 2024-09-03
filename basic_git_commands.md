@@ -33,5 +33,8 @@ mv is the command that allows to move a file, and allows to assign a new name, t
 creates a new branch that will be also activated
 
 ## git rm filename
-
 removes a file in repository
+
+## git log
+returns all the commits saved of the currently active repository along with the unique identifier of the commit and the commit message, the date etc.
+
