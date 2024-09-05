@@ -1,7 +1,8 @@
 nextflow.enable.dsl=2
+params.out = "$launchDir/output"
 
 process downloadFile {
-    publishDir "/home/julia/Module_Git_with_Wojtek/git-ABI-repo", mode :"copy", overwrite: true
+    publishDir params.out, mode :"copy", overwrite: true
     output:
         path "batch1.fasta"
     """
@@ -10,7 +11,7 @@ process downloadFile {
 }
 
 process countSequences {
-    publishDir "/home/julia/Module_Git_with_Wojtek/git-ABI-repo", mode :"copy", overwrite: true
+    publishDir params.out, mode :"copy", overwrite: true
 	input:
 		path infile
     output:
@@ -20,7 +21,20 @@ process countSequences {
 	"""
 }
 
+process splitseqs {
+	publishDir params.out, mode :"copy", overwrite: true
+	input:
+		path infile1
+	output:
+		path "prefix_*.fasta"
+	
+	"""
+	split -d -l 2 $infile1 prefix_ --additional-suffix=.fasta
+	"""
+}
+
 workflow {
-    fastachannel = downloadFile()
-	countSequences(fastachannel)
+	filechannel = downloadFile()
+	countSequences(filechannel)
+	splitseqs(filechannel)
 }
