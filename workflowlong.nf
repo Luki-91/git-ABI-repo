@@ -33,8 +33,19 @@ process splitseqs {
 	"""
 }
 
+process countrepeats {
+	publishDir params.out, mode:"copy", overwrite: true
+	input: 
+		path infile
+	output:
+		path ${infasta.getSimpleName()}_countrepeats.txt
+	"""
+	grep -o infile "GCCGCG" | wc -l > ${infasta.getSimpleName()}_countrepeats*.txt
+	"""
+}
+
 workflow {
 	filechannel = downloadFile()
 	countSequences(filechannel)
-	splitseqs(filechannel)
+	splitseqs(filechannel) | flatten | countrepeats
 }
