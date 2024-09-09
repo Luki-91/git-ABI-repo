@@ -41,10 +41,12 @@ process createSummary {
 
 process plot {
 	publishDir params.out, mode:"copy", overwrite:true
+	output:
+		path "${params.species}_bargraph.png"
 	input:
 		path summary
 	"""
-	python3 $params.pyfile $projectDir/output/summary_count_dinucs.csv "$projectDir/output/${params.species}_bargraph.png"
+	python3 $params.pyfile $summary "${params.species}_bargraph.png"
 	"""
 }
 
