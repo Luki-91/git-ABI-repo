@@ -52,9 +52,7 @@ process plot {
 
 workflow {
 DinucleotideChannel = Channel.fromPath(params.dinucfile).splitText().map { it.trim() }
-DinucleotideChannel.view()
 GenomeChannel = downloadFile()
-GenomeChannel.view()
 GenomeChannel.combine(DinucleotideChannel) | countDinucs | collect | createSummary | plot
 }
 
