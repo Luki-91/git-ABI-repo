@@ -25,7 +25,7 @@ process makeFasta {
 	output:
 		path "seq_*.fasta"
 	// the split command needs the - before seq to know the input is piped in
-	// everython except "@" | 1st & 10th textblock | replace(s) start(^) with ">" | 
+	// everything except "@" | 1st & 10th textblock | replace(s) start(^) with ">" | 
 	// make "tab"('\') to newline('\n') | split into numerically named (-d) fasta file (suffix) with 2 lines (-l 2)
 	"""
 	grep -v "@" $samfile | cut -f 1,10 | sed "s/^/>/" | tr '\t' '\n' | split -d -l 2 - seq_ --additional-suffix=.fasta
