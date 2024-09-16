@@ -77,7 +77,7 @@ workflow {
 	} else if (params.url == null && params.fileloc != null) {
 		fastaChannel = Channel.fromPath(params.fileloc) | makeFasta | flatten
 	} else {
-		print "Error: please procide either --url or --fileloc"
+		print "Error: please provide either --url or --fileloc"
 		System exit (0)
 	}
 codonChannel = Channel.fromPath(params.codons).splitText().map { it.trim() }

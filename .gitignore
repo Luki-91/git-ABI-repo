@@ -5,3 +5,5 @@ output.pdf
 work
 *.fasta
 *.log*
+*cache*
+.nextflow*
