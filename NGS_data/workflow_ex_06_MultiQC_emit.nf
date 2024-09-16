@@ -53,20 +53,8 @@ process trim_fastp {
 	input:
 		path infile
     output:
-        path "trimmed_${infile.getBaseName()}_fastp.*"
-	"""
-	fastp -i $infile -o trimmed_${infile.getBaseName()}_fastp.fastq
-	"""
-}
-
-process trim_fastp2 {
-	publishDir params.out, mode:"copy", overwrite:true
-	container "https://depot.galaxyproject.org/singularity/fastp%3A0.23.4--hadf994f_3"
-	input:
-		path infile
-    output:
-		path "trimmed_${infile.getBaseName()}_fastp.html"
-		path "trimmed_${infile.getBaseName()}_fastp.json"
+        path "trimmed_${infile.getBaseName()}_fastp.fastq", emit: data
+		path "trimmed_${infile.getBaseName()}_fastp.json", emit: report
 	"""
 	fastp -i $infile -o trimmed_${infile.getBaseName()}_fastp.fastq \
 	-h trimmed_${infile.getBaseName()}_fastp.html -j trimmed_${infile.getBaseName()}_fastp.json
@@ -77,12 +65,12 @@ process multiQC {
 	publishDir params.out, mode:"copy", overwrite:true
 	container "https://depot.galaxyproject.org/singularity/multiqc:1.24.1--pyhdfd78af_0"
 	input:
-		path "$params.out"
+		path infiles
     output:
         file "multiqc_report.html"
 		path "multiqc_data"
 	"""
-	multiqc $params.out
+	multiqc .
 	"""
 }
 
@@ -100,11 +88,10 @@ process filter_channel {
 workflow {
 	dumpChannel = fasterqDump(Channel.from(params.accession))
 	trimChannel = trim_fastp(dumpChannel)
-	qcChannel = dumpChannel.concat(trimChannel)
+	qcChannel = dumpChannel.concat(trimChannel.data)
 	qcChannel.view()
 	Afterfastqc = fastqc(qcChannel.flatten()) | collect
-	extratrim = trim_fastp2(dumpChannel)
-	MultiqcCh = Afterfastqc.concat(extratrim)
+	MultiqcCh = Afterfastqc.concat(trimChannel.report)
 	MultiqcCh | collect | multiQC
 	makeStats(qcChannel.flatten())
 }
