@@ -106,6 +106,6 @@ workflow {
 	qcChannel.view()
 	Afterfastqc = fastqc(qcChannel.flatten()) | collect
 	MultiqcCh = Afterfastqc.concat(extratrim)
-	multiQC(MultiqcCh)
+	MultiqcCh | collect | multiQC
 	makeStats(qcChannel.flatten())
 }
